@@ -1,142 +1,82 @@
-# 11 Express.js: Note Taker
+# Note Taker Application
 
-## Your Task
+## Table of Contents
+- [Description](#description)
+- [User Story](#user-story)
+- [Acceptance Criteria](#acceptance-criteria)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Routes](#api-routes)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [Questions](#questions)
 
-Your assignment is to modify starter code to create an application called Note Taker that can be used to write and save notes. This application will use an Express.js back end and will save and retrieve note data from a JSON file.
-
-The application’s front end has already been created. It's your job to build the back end, connect the two, and then deploy the entire application to Heroku.
-
+## Description
+The Note Taker application is designed to help you easily write and save notes. It provides a user-friendly interface to organize your thoughts and keep track of tasks you need to complete. This application utilizes an Express.js back end to store and retrieve your notes efficiently.
 
 ## User Story
-
-```
-AS A small business owner
-I WANT to be able to write and save notes
-SO THAT I can organize my thoughts and keep track of tasks I need to complete
-```
-
+As a small business owner, I want to be able to write and save notes so that I can organize my thoughts and keep track of tasks I need to complete.
 
 ## Acceptance Criteria
+1. **Landing Page**: When you open the Note Taker, you will be presented with a landing page containing a link to a notes page.
 
-```
-GIVEN a note-taking application
-WHEN I open the Note Taker
-THEN I am presented with a landing page with a link to a notes page
-WHEN I click on the link to the notes page
-THEN I am presented with a page with existing notes listed in the left-hand column, plus empty fields to enter a new note title and the note’s text in the right-hand column
-WHEN I enter a new note title and the note’s text
-THEN a Save icon appears in the navigation at the top of the page
-WHEN I click on the Save icon
-THEN the new note I have entered is saved and appears in the left-hand column with the other existing notes
-WHEN I click on an existing note in the list in the left-hand column
-THEN that note appears in the right-hand column
-WHEN I click on the Write icon in the navigation at the top of the page
-THEN I am presented with empty fields to enter a new note title and the note’s text in the right-hand column
-```
+2. **Notes Page**: Clicking on the link to the notes page will take you to a page with the following features:
+   
+   - **Existing Notes**: In the left-hand column, you will see a list of existing notes.
+   
+   - **Note Entry**: In the right-hand column, there will be empty fields where you can enter a new note title and the note's text.
 
+3. **Saving Notes**: After entering a new note title and text, a Save icon will appear in the navigation at the top of the page.
 
-## Mock-Up
+4. **Save Action**: When you click on the Save icon, the new note you've entered will be saved and displayed in the left-hand column with your other existing notes.
 
-The following images show the web application's appearance and functionality:
+5. **Viewing Notes**: You can click on an existing note in the left-hand column, and that note will appear in the right-hand column for viewing.
 
-![Existing notes are listed in the left-hand column with empty fields on the right-hand side for the new note’s title and text.](./Assets/11-express-homework-demo-01.png)
+6. **Creating New Notes**: Clicking on the Write icon in the navigation at the top of the page will present you with empty fields to enter a new note title and the note's text in the right-hand column.
 
-![Note titled “Balance accounts” reads, “Balance account books by end of day Monday,” with other notes listed on the left.](./Assets/11-express-homework-demo-02.png)
+## Installation
+To run the Note Taker application locally, follow these steps:
+
+1. Clone the GitHub repository to your local machine:
 
 
-## Getting Started
-
-On the back end, the application should include a `db.json` file that will be used to store and retrieve notes using the `fs` module.
-
-The following HTML routes should be created:
-
-* `GET /notes` should return the `notes.html` file.
-
-* `GET *` should return the `index.html` file.
-
-The following API routes should be created:
-
-* `GET /api/notes` should read the `db.json` file and return all saved notes as JSON.
-
-* `POST /api/notes` should receive a new note to save on the request body, add it to the `db.json` file, and then return the new note to the client. You'll need to find a way to give each note a unique id when it's saved (look into npm packages that could do this for you).
+2. Navigate to the project directory:
 
 
-## Bonus
-
-You haven’t learned how to handle DELETE requests, but this application offers that functionality on the front end. As a bonus, try to add the DELETE route to the application using the following guideline:
-
-* `DELETE /api/notes/:id` should receive a query parameter that contains the id of a note to delete. To delete a note, you'll need to read all notes from the `db.json` file, remove the note with the given `id` property, and then rewrite the notes to the `db.json` file.
+3. Install the required npm packages:
 
 
-## Grading Requirements
-
-> **Note**: If a Challenge assignment submission is marked as “0”, it is considered incomplete and will not count towards your graduation requirements. Examples of incomplete submissions include the following:
->
-> * A repository that has no code
->
-> * A repository that includes a unique name but nothing else
->
-> * A repository that includes only a README file but nothing else
->
-> * A repository that only includes starter code
-
-This Challenge is graded based on the following criteria: 
+## Usage
+To start the Note Taker application, run the following command:
 
 
-### Technical Acceptance Criteria: 40%
+Once the server is running, open your web browser and go to http://localhost:3000 to access the Note Taker application.
 
-* Satisfies all of the preceding acceptance criteria plus the following:
+## API Routes
+The Note Taker application includes the following API routes:
 
-  * Application front end must connect to an Express.js back end.
+- `GET /api/notes`: This route reads the db.json file and returns all saved notes as JSON.
 
-  * Application back end must store notes that have a unique id in a JSON file.
+- `POST /api/notes`: This route receives a new note to save on the request body, adds it to the db.json file, and then returns the new note to the client. Each note is assigned a unique ID.
 
-  * Application must be deployed to Heroku.
+- `DELETE /api/notes/:id`: This route receives a query parameter that contains the ID of a note to delete. It reads all notes from the db.json file, removes the note with the given ID, and then rewrites the remaining notes to the db.json file.
 
+## Deployment
+The Note Taker application is deployed on Heroku and can be accessed at the following URL:
 
-### Deployment: 36%
+[Live Demo](https://your-heroku-app-url.com)
 
-* Application deployed at live URL.
+## Contributing
+Contributions are welcome! If you would like to contribute to this project, please follow these steps:
 
-* Application loads with no errors.
+1. Fork the repository.
 
-* Application GitHub URL submitted.
+2. Create a new branch for your feature or bug fix.
 
-* GitHub repository contains application code.
+3. Make your changes and commit them with descriptive commit messages.
 
+4. Push your changes to your fork.
 
-### Application Quality: 11%
+5. Create a pull request to merge your changes into the main repository.
 
-* Application console is free of errors.
-
-
-### Repository Quality: 13%
-
-* Repository has a unique name.
-
-* Repository follows best practices for file structure and naming conventions.
-
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
-
-* Repository contains multiple descriptive commit messages.
-
-* Repository contains quality README file with description, screenshot, and link to deployed application.
-
-
-### Bonus: +10 Points
-
-Fulfilling the following can add up to 10 points to your grade. Note that the highest grade you can achieve is still 100:
-
-* Application allows users to delete notes.
-
-
-## Review
-
-You are required to submit BOTH of the following for review:
-
-* The URL of the functional, deployed application.
-
-* The URL of the GitHub repository, with a unique name and a README describing the project.
-
-- - -
-© 2023 edX Boot Camps LLC. Confidential and Proprietary. All Rights Reserved.
+Thank you for using the Note Taker Application!

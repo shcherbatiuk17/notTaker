@@ -1,59 +1,85 @@
 const notes = require("express").Router();
-const { v4: uuidv4} = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
-const utils = require("util");
-// using promisify from the util package to allow an async function to be used after the readfile method is used from the fs module.
-const readFromFile = utils.promisify(fs.readFile);
+const util = require("util");
+
+// Using promisify from the util package to make readFile asynchronous.
+const readFromFile = util.promisify(fs.readFile);
+
+// Function to write data to a file.
 function writeFile(path, data) {
-    fs.writeFile(path, data, (err) =>
-    err ? console.info(err) : console.info("Changes made successfully!"))
+  fs.writeFile(path, data, (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.info("Changes saved successfully!");
+    }
+  });
 }
 
-// setting the endpoint and response for the get fetch method to send note objects to the user which will be used to display the notes list on the front end.
+// GET endpoint to retrieve notes and send them to the user.
 notes.get('/', (req, res) => {
-  readFromFile('./db/notes.json').then((data) => res.json(JSON.parse(data)));
-});
-
-// setting the post endpoint, which will first check the request body sent by the user has a title and text property.
-notes.post('/', (req, res) => {
-    const { title, text } = req.body;
-
-    if(title, text) {
-        // if the title and text properties are found, the data is parsed and used to construct a new object that adds a unique id property to the object using the uuid package.
-        readFromFile('./db/notes.json')
-        .then((data) => {
-            const parsedNote = JSON.parse(data)
-            const toDo = {
-                title,
-                text,
-                id: uuidv4(),
-            };
-            // after the id is added the new object is pushed back into the json data, and is used to resave into the notes.json with the newly added note to the file.
-            parsedNote.push(toDo);
-            writeFile('./db/notes.json', JSON.stringify(parsedNote));
-            // then the user is sent a response with a code 201 for 'created' to notify them that their note is successfully received and added to the notes list.
-            res.status(201).json('Note added successfully! 📝');
-        });
-    } 
-    // if the conditions do not pass, then the server responds with code 500 to notify them of a server error.
-    else { res.status(500).json('Unable to add your note.')}
-});
-
-// sets the parameter endpoint that takes in an id
-notes.delete('/:id', (req, res) => {
-    // the id is taken from the request body and the unique id is submitted when the user clicks the delete button on the application.
-    const requestedId = req.params.id;
-    // the json file is read then the unique id is used to filter the object array to return every element of the array EXCEPT the one that matched the unique id.
-    readFromFile('./db/notes.json')
+  readFromFile('./db/notes.json')
     .then((data) => {
-        const notesList = JSON.parse(data)
-        return notesList.filter((note) => note.id !== requestedId);
+      // Parse the data and send it as a JSON response.
+      res.json(JSON.parse(data));
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json('Internal Server Error');
+    });
+});
+
+// POST endpoint to add a new note.
+notes.post('/', (req, res) => {
+  const { title, text } = req.body;
+
+  if (title && text) {
+    // If the title and text properties are provided, proceed with adding a new note.
+    readFromFile('./db/notes.json')
+      .then((data) => {
+        const parsedNotes = JSON.parse(data);
+        const newNote = {
+          title,
+          text,
+          id: uuidv4(), // Generate a unique ID using uuid.
+        };
+        // Add the new note to the existing notes array.
+        parsedNotes.push(newNote);
+        // Write the updated data back to notes.json.
+        writeFile('./db/notes.json', JSON.stringify(parsedNotes));
+        // Respond with a 201 status indicating a successful creation.
+        res.status(201).json('Note added successfully! 📝');
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json('Internal Server Error');
+      });
+  } else {
+    // If required properties are missing, respond with a 500 status (server error).
+    res.status(500).json('Unable to add your note.');
+  }
+});
+
+// DELETE endpoint to remove a note by its ID.
+notes.delete('/:id', (req, res) => {
+  const requestedId = req.params.id;
+  readFromFile('./db/notes.json')
+    .then((data) => {
+      const notesList = JSON.parse(data);
+      // Filter out the note with the matching ID and keep the rest.
+      const filteredData = notesList.filter((note) => note.id !== requestedId);
+      return filteredData;
     })
     .then((filteredData) => {
-        // then the newly filtered data is saved back into the notes.json file and the user is sent a response after the note in the list was deleted.
-        writeFile('./db/notes.json', JSON.stringify(filteredData));
-        res.json('Your notes have been updated')
+      // Write the filtered data back to notes.json and respond to the user.
+      writeFile('./db/notes.json', JSON.stringify(filteredData));
+      res.json('Your notes have been updated');
     })
-})
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json('Internal Server Error');
+    });
+});
 
 module.exports = notes;

@@ -3,7 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require("fs");
 const util = require("util");
 
-// Using promisify from the util package to make readFile asynchronous.
+// Promisify the readFile function to make it asynchronous.
 const readFromFile = util.promisify(fs.readFile);
 
 // Function to write data to a file.
@@ -19,7 +19,7 @@ function writeFile(path, data) {
 
 // GET endpoint to retrieve notes and send them to the user.
 notes.get('/', (req, res) => {
-  readFromFile('./db/notes.json')
+  readFromFile('./db/db.json')
     .then((data) => {
       // Parse the data and send it as a JSON response.
       res.json(JSON.parse(data));
@@ -36,7 +36,7 @@ notes.post('/', (req, res) => {
 
   if (title && text) {
     // If the title and text properties are provided, proceed with adding a new note.
-    readFromFile('./db/notes.json')
+    readFromFile('./db/db.json')
       .then((data) => {
         const parsedNotes = JSON.parse(data);
         const newNote = {
@@ -47,7 +47,7 @@ notes.post('/', (req, res) => {
         // Add the new note to the existing notes array.
         parsedNotes.push(newNote);
         // Write the updated data back to notes.json.
-        writeFile('./db/notes.json', JSON.stringify(parsedNotes));
+        writeFile('./db/db.json', JSON.stringify(parsedNotes));
         // Respond with a 201 status indicating a successful creation.
         res.status(201).json('Note added successfully! 📝');
       })
@@ -64,7 +64,7 @@ notes.post('/', (req, res) => {
 // DELETE endpoint to remove a note by its ID.
 notes.delete('/:id', (req, res) => {
   const requestedId = req.params.id;
-  readFromFile('./db/notes.json')
+  readFromFile('./db/db.json')
     .then((data) => {
       const notesList = JSON.parse(data);
       // Filter out the note with the matching ID and keep the rest.
@@ -73,7 +73,7 @@ notes.delete('/:id', (req, res) => {
     })
     .then((filteredData) => {
       // Write the filtered data back to notes.json and respond to the user.
-      writeFile('./db/notes.json', JSON.stringify(filteredData));
+      writeFile('./db/db.json', JSON.stringify(filteredData));
       res.json('Your notes have been updated');
     })
     .catch((err) => {
